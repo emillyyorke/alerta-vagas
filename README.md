@@ -1,4 +1,4 @@
-# 🚀 Vagas Radar - Sistema Full-Stack de Monitoramento
+# 🚀 Radar de Vagas- Sistema Full-Stack de Monitoramento
 
 Um sistema Full-Stack projetado para automatizar a busca e o monitoramento de vagas de emprego em tempo real. A aplicação permite cadastrar palavras-chave (termos de busca), realiza varreduras automatizadas (Web Scraping) e exibe os resultados em um Dashboard interativo e moderno.
 
