@@ -1,0 +1,12 @@
+# Ignorar ambiente virtual do Python
+venv/
+__pycache__/
+*.pyc
+
+# Ignorar pacotes do Node/React
+node_modules/
+dist/
+
+# Ignorar banco de dados local (opcional, mas recomendado)
+*.db
+*.sqlite3
