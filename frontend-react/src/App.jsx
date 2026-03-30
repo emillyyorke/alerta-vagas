@@ -11,11 +11,7 @@ function App() {
   const formatarTitulo = (texto) => {
     if (!texto) return '';
     let limpo = texto;
-
-    // 1. Separa minúscula da Maiúscula (ex: PessoaAnalista -> Pessoa Analista)
     limpo = limpo.replace(/([a-z])([A-Z])/g, '$1 $2');
-
-    // 2. Conserta as preposições que o site teima em grudar
     limpo = limpo.replace(/Analistade/gi, 'Analista de ');
     limpo = limpo.replace(/Pessoade/gi, 'Pessoa de ');
     limpo = limpo.replace(/Desenvolvedorade/gi, 'Desenvolvedora de ');
@@ -24,8 +20,6 @@ function App() {
     limpo = limpo.replace(/Especialistade/gi, 'Especialista de ');
     limpo = limpo.replace(/Infraestruturae /gi, 'Infraestrutura e ');
     limpo = limpo.replace(/Infraestruturae/gi, 'Infraestrutura e ');
-    
-    // --- NOVAS REGRAS PARA CARGOS ---
     limpo = limpo.replace(/Supervisorde/gi, 'Supervisor de ');
     limpo = limpo.replace(/Assistentede/gi, 'Assistente de ');
     limpo = limpo.replace(/Coordenadorde/gi, 'Coordenador de ');
@@ -34,24 +28,17 @@ function App() {
     limpo = limpo.replace(/Diretorde/gi, 'Diretor de ');
     limpo = limpo.replace(/Técnicode|Tecnicode/gi, 'Técnico de ');
     limpo = limpo.replace(/Estagiáriode|Estagiariode/gi, 'Estagiário de ');
-
-    // 3. Arruma as siglas grudadas
     limpo = limpo.replace(/TISr/gi, 'TI Sr');
     limpo = limpo.replace(/TIJr/gi, 'TI Jr');
     limpo = limpo.replace(/T\.i/gi, 'TI');
-    
-    // 4. Dá um respiro nas pontuações (hifens e parênteses)
     limpo = limpo.replace(/\s*-\s*/g, ' - '); 
     limpo = limpo.replace(/\s*\(/g, ' ('); 
-
-    // 5. Remove espaços duplos
     return limpo.replace(/\s+/g, ' ').trim();
   };
 
   const carregarVagas = async () => {
     try {
       const response = await axios.get('http://127.0.0.1:8000/vagas/')
-      // Vagas mais recentes no topo
       const vagasMaisNovas = response.data.sort((a, b) => b.id - a.id)
       setVagas(vagasMaisNovas)
     } catch (error) {
@@ -64,23 +51,19 @@ function App() {
   const cadastrarEBuscar = async (e) => {
     e.preventDefault()
     if (!novoTermo) return
-    
     setProcessando(true)
     try {
       await axios.post(`http://127.0.0.1:8000/usuarios/1/termos/`, { palavra_chave: novoTermo })
       const termoSalvo = novoTermo
       setNovoTermo('') 
-      
       await axios.post('http://127.0.0.1:8000/admin/varredura/')
-      alert(`Termo '${termoSalvo}' adicionado! A varredura começou. Aguarde uns segundos...`)
-      
+      alert(`Termo '${termoSalvo}' adicionado! A varredura começou. Aguarde...`)
       setTimeout(() => {
         carregarVagas()
         setProcessando(false) 
       }, 8000)
-      
     } catch (error) {
-      alert("Erro ao cadastrar ou buscar. Verifique o terminal do Python.")
+      alert("Erro ao cadastrar ou buscar.");
       setProcessando(false)
     }
   }
@@ -94,13 +77,26 @@ function App() {
         <header className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8 mb-12 border-b border-slate-800 pb-10">
           <div className="flex items-center gap-5">
             <div>
-              <h1 className="text-3xl font-extrabold tracking-tight">Radar de Vagas</h1>
-              <p className="text-slate-400 font-medium">Sua busca automatizada em tempo real.</p>
+              <h1 className="text-3xl font-extrabold tracking-tight italic">Radar de Vagas</h1>
+              
+              {/* ASSINATURA E LINKS DA EMILLY */}
+              <div className="flex flex-col mt-1">
+                <p className="text-[10px] font-mono text-blue-400 uppercase tracking-[0.2em] font-bold">
+                  Developed by Emilly Yorke
+                </p>
+                <div className="flex gap-4 mt-2">
+                  <a href="https://www.linkedin.com/in/emilly-yorke" target="_blank" rel="noreferrer" className="text-xs text-slate-400 hover:text-white transition-colors flex items-center gap-1">
+                    <span>🔗</span> LinkedIn
+                  </a>
+                  <a href="https://github.com/emillyyorke" target="_blank" rel="noreferrer" className="text-xs text-slate-400 hover:text-white transition-colors flex items-center gap-1">
+                    <span>📁</span> GitHub
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
 
           <div className="flex flex-wrap gap-4 w-full lg:w-auto">
-            {/* O formulário agora é a única ação principal da tela */}
             <form onSubmit={cadastrarEBuscar} className="flex gap-2 flex-grow lg:flex-grow-0">
               <input 
                 className="bg-slate-900 border border-slate-700 px-4 py-3 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition-all w-full md:w-64"
