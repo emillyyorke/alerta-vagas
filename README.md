@@ -142,7 +142,7 @@ git commit -m "Primeiro commit: Sistema Vagas Radar Full-Stack finalizado"
 git branch -M main
 
 # Conecta ao repositório vazio criado no site do GitHub (Troque pelo seu link)
-git remote add origin [https://github.com/SEU_USUARIO/SEU_REPOSITORIO.git](https://github.com/SEU_USUARIO/SEU_REPOSITORIO.git)
+git remote add origin [https://github.com/SEU_USUARIO/SEU_REPOSITORIO.git](https://github.com/emillyyorke/alerta-vagas.git)
 
 # Envia os arquivos para a nuvem
 git push -u origin main
